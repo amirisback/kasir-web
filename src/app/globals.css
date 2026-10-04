@@ -3,48 +3,48 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
+  --background: #faf7f2;
+  --foreground: #261c14;
   --card: #ffffff;
-  --card-foreground: #09090b;
+  --card-foreground: #261c14;
   --popover: #ffffff;
-  --popover-foreground: #09090b;
-  --primary: #18181b;
-  --primary-foreground: #fafafa;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #18181b;
-  --radius: 0.5rem;
+  --popover-foreground: #261c14;
+  --primary: #d97706;
+  --primary-foreground: #ffffff;
+  --secondary: #f3ece2;
+  --secondary-foreground: #452a18;
+  --muted: #f3ece2;
+  --muted-foreground: #786050;
+  --accent: #fdf2e9;
+  --accent-foreground: #92400e;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e7dece;
+  --input: #e7dece;
+  --ring: #d97706;
+  --radius: 0.625rem;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card: #09090b;
-  --card-foreground: #fafafa;
-  --popover: #09090b;
-  --popover-foreground: #fafafa;
-  --primary: #fafafa;
-  --primary-foreground: #18181b;
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
-  --destructive: #7f1d1d;
-  --destructive-foreground: #fafafa;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #d4d4d8;
+  --background: #14100d;
+  --foreground: #f5efeb;
+  --card: #1c1713;
+  --card-foreground: #f5efeb;
+  --popover: #1c1713;
+  --popover-foreground: #f5efeb;
+  --primary: #f59e0b;
+  --primary-foreground: #14100d;
+  --secondary: #2a221c;
+  --secondary-foreground: #f5efeb;
+  --muted: #2a221c;
+  --muted-foreground: #a8988d;
+  --accent: #33251a;
+  --accent-foreground: #fbbf24;
+  --destructive: #991b1b;
+  --destructive-foreground: #f5efeb;
+  --border: #362c24;
+  --input: #362c24;
+  --ring: #f59e0b;
 }
 
 @theme inline {
@@ -79,4 +79,27 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-receipt,
+  #printable-receipt * {
+    visibility: visible;
+  }
+  #printable-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
 }

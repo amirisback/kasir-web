@@ -1,10 +1,10 @@
 ## 🧠 Context
 
 - **Nama Website** Diserahkan ke Ai
-- **Objective:** Membangun website **Warung Kopi Nusantara** — Landing page kedai kopi artisan dengan online ordering.
+- **Objective:** Membangun website **Kasir** — kasir online untuk umkm
 - **Project Base:** Repository ini (`Init-nextjs-app`) — sudah ter-setup dengan Next.js 16, Tailwind CSS v4, TypeScript strict, Serwist PWA
 - **Target Audience:** Dewasa
-- **Tujuan Bisnis:** Menjangkau pasar, memperkenalkan produk dan brand, memudahkan pelanggan melakukan pemesanan.
+- **Tujuan Bisnis:** kasir untuk transaksi toko
 
 ## 📋 Requirements
 
@@ -15,7 +15,8 @@
 3. **[Halaman 3]** (`/path`) — [Deskripsi]
 
 ### Fitur Utama
-- [ ] 
+
+- [ ]
 
 ### Desain & UI
 

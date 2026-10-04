@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import type { Locale } from "@/i18n/config";
 import { i18n } from "@/i18n/config";
 
-// Base URL for the site — update in .env for production
+// Base URL for the site - update in .env for production
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const SITE_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Amir App";
 
@@ -137,7 +137,7 @@ export function generatePageSeo({
   images?: string[];
   noIndex?: boolean;
 }): Metadata {
-  const fullTitle = pathname === "" || pathname === "/" ? title : `${title} — ${seoConfig.siteName}`;
+  const fullTitle = pathname === "" || pathname === "/" ? title : `${title} | ${seoConfig.siteName}`;
 
   return {
     metadataBase: new URL(seoConfig.siteUrl),

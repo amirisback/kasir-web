@@ -2,13 +2,13 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Amir App',
-    short_name: 'AmirApp',
-    description: 'Amir App Progressive Web App',
+    name: 'KulaPOS - Kasir UMKM Kuliner',
+    short_name: 'KulaPOS',
+    description: 'Aplikasi Kasir dan POS modern untuk UMKM Kuliner dan Kedai Kopi',
     start_url: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#000000',
+    background_color: '#faf7f2',
+    theme_color: '#d97706',
     icons: [
       {
         src: '/icon-192x192.svg',

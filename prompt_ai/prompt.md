@@ -27,7 +27,7 @@ Bertindak sebagai **Senior Frontend Engineer** yang expert di:
   2. Buat shared components (`header`, `footer`, `button`, dll)
   3. Buat halaman satu per satu
   4. Polish: animasi, transitions, responsive check
-  5. Pastikan `npm run build` sukses tanpa error
+  5. Pastikan `bun run build` sukses tanpa error
 
 ### Phase
 

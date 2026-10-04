@@ -1,0 +1,142 @@
+[
+  {
+    "id": "item-01",
+    "name": "Kula Latte Aren",
+    "category": "kopi",
+    "price": 26000,
+    "description": "Espresso ganda dengan susu segar dan gula aren organik khas KulaPOS",
+    "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80",
+    "stock": 45,
+    "isFavorite": true
+  },
+  {
+    "id": "item-02",
+    "name": "Espresso Doppio",
+    "category": "kopi",
+    "price": 18000,
+    "description": "Ekstraksi kopi murni double shot dengan crema keemasan tebal",
+    "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+    "stock": 50,
+    "isFavorite": false
+  },
+  {
+    "id": "item-03",
+    "name": "Americano Long Black",
+    "category": "kopi",
+    "price": 22000,
+    "description": "Espresso segar dipadukan dengan air mineral panas atau es batu",
+    "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80",
+    "stock": 60,
+    "isFavorite": true
+  },
+  {
+    "id": "item-04",
+    "name": "Cappuccino Cinnamon",
+    "category": "kopi",
+    "price": 25000,
+    "description": "Espresso seimbang dengan microfoam susu creamy dan taburan kayu manis",
+    "image": "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80",
+    "stock": 35,
+    "isFavorite": false
+  },
+  {
+    "id": "item-05",
+    "name": "Matcha Latte Uji",
+    "category": "non-kopi",
+    "price": 28000,
+    "description": "Bubuk teh hijau matcha premium asli Uji Kyoto dipadu susu segar",
+    "image": "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80",
+    "stock": 25,
+    "isFavorite": true
+  },
+  {
+    "id": "item-06",
+    "name": "Artisan Earl Grey Milk Tea",
+    "category": "non-kopi",
+    "price": 24000,
+    "description": "Seduhan teh hitam bergamot aromatik dengan kelembutan susu murni",
+    "image": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80",
+    "stock": 30,
+    "isFavorite": false
+  },
+  {
+    "id": "item-07",
+    "name": "Fresh Lemonade Mint",
+    "category": "non-kopi",
+    "price": 20000,
+    "description": "Perasan lemon segar dengan daun mint dingin penyegar dahaga",
+    "image": "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80",
+    "stock": 40,
+    "isFavorite": false
+  },
+  {
+    "id": "item-08",
+    "name": "Nasi Goreng Kampung Kula",
+    "category": "makanan",
+    "price": 32000,
+    "description": "Nasi goreng bumbu tradisional dengan suwiran ayam, telur mata sapi, dan kerupuk",
+    "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=80",
+    "stock": 25,
+    "isFavorite": true
+  },
+  {
+    "id": "item-09",
+    "name": "Mie Ayam Jamur Truffle",
+    "category": "makanan",
+    "price": 30000,
+    "description": "Mie kenyal gurih dengan topping ayam jamur lezat dan aroma minyak truffle",
+    "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+    "stock": 20,
+    "isFavorite": false
+  },
+  {
+    "id": "item-10",
+    "name": "Grilled Chicken Rice Bowl",
+    "category": "makanan",
+    "price": 35000,
+    "description": "Ayam panggang bumbu teriyaki manis gurih di atas nasi pulen hangat",
+    "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
+    "stock": 18,
+    "isFavorite": false
+  },
+  {
+    "id": "item-11",
+    "name": "Kentang Goreng Truffle",
+    "category": "camilan",
+    "price": 22000,
+    "description": "Potongan kentang goreng renyah dengan bumbu rosemary dan saus cocolan",
+    "image": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",
+    "stock": 40,
+    "isFavorite": false
+  },
+  {
+    "id": "item-12",
+    "name": "Tahu Cabe Garam Krispi",
+    "category": "camilan",
+    "price": 18000,
+    "description": "Tahu goreng renyah bumbu cabai rawit merah, bawang putih, dan daun bawang",
+    "image": "https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=600&q=80",
+    "stock": 30,
+    "isFavorite": true
+  },
+  {
+    "id": "item-13",
+    "name": "Butter Croissant Artisan",
+    "category": "penutup",
+    "price": 24000,
+    "description": "Pastry lapis mentega Prancis yang renyah di luar dan lembut di dalam",
+    "image": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80",
+    "stock": 15,
+    "isFavorite": true
+  },
+  {
+    "id": "item-14",
+    "name": "Chocolate Fudge Brownie",
+    "category": "penutup",
+    "price": 20000,
+    "description": "Brownies cokelat panggang pekat dengan taburan almond renyah",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
+    "stock": 20,
+    "isFavorite": false
+  }
+]
