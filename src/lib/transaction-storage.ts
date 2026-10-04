@@ -89,6 +89,7 @@ const INITIAL_DEMO_TRANSACTIONS: Transaction[] = [
 ];
 
 let cachedTransactions: Transaction[] = INITIAL_DEMO_TRANSACTIONS;
+let cachedRaw: string | null = null;
 const listeners = new Set<() => void>();
 
 function notifyTransactionListeners() {
@@ -97,8 +98,23 @@ function notifyTransactionListeners() {
 
 export function subscribeTransactions(callback: () => void) {
   listeners.add(callback);
+
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) {
+      getStoredTransactions();
+      callback();
+    }
+  };
+
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('storage', handleStorage);
+  }
+
   return () => {
     listeners.delete(callback);
+    if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') {
+      window.removeEventListener('storage', handleStorage);
+    }
   };
 }
 
@@ -119,11 +135,17 @@ export function getStoredTransactions(): Transaction[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DEMO_TRANSACTIONS));
+      const initialJson = JSON.stringify(INITIAL_DEMO_TRANSACTIONS);
+      localStorage.setItem(STORAGE_KEY, initialJson);
+      cachedRaw = initialJson;
       cachedTransactions = INITIAL_DEMO_TRANSACTIONS;
-      return INITIAL_DEMO_TRANSACTIONS;
+      return cachedTransactions;
     }
-    cachedTransactions = JSON.parse(raw) as Transaction[];
+
+    if (raw !== cachedRaw) {
+      cachedRaw = raw;
+      cachedTransactions = JSON.parse(raw) as Transaction[];
+    }
     return cachedTransactions;
   } catch {
     return cachedTransactions;
@@ -136,7 +158,9 @@ export function saveTransaction(transaction: Transaction): void {
   try {
     const current = getStoredTransactions();
     const updated = [transaction, ...current];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    const updatedJson = JSON.stringify(updated);
+    localStorage.setItem(STORAGE_KEY, updatedJson);
+    cachedRaw = updatedJson;
     cachedTransactions = updated;
     notifyTransactionListeners();
   } catch (error) {
@@ -147,7 +171,9 @@ export function saveTransaction(transaction: Transaction): void {
 export function resetStoredTransactions(): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DEMO_TRANSACTIONS));
+    const initialJson = JSON.stringify(INITIAL_DEMO_TRANSACTIONS);
+    localStorage.setItem(STORAGE_KEY, initialJson);
+    cachedRaw = initialJson;
     cachedTransactions = INITIAL_DEMO_TRANSACTIONS;
     notifyTransactionListeners();
   } catch (error) {
