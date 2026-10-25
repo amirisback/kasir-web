@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'KulaPOS - Kasir UMKM Kuliner',
-    short_name: 'KulaPOS',
+    name: 'AmirPOS - Kasir UMKM Kuliner',
+    short_name: 'AmirPOS',
     description: 'Aplikasi Kasir dan POS modern untuk UMKM Kuliner dan Kedai Kopi',
     start_url: '/',
     display: 'standalone',

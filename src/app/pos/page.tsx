@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getCurrentDictionary();
 
   return generatePageSeo({
-    title: 'Mesin Kasir (POS) - KulaPOS',
+    title: 'Mesin Kasir (POS) - AmirPOS',
     description: 'Layar kasir Point of Sale aktif untuk pencatatan transaksi pesanan kedai kopi dan kuliner.',
     locale,
     pathname: '/pos',

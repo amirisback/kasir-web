@@ -342,7 +342,7 @@ export function TransactionsClient() {
         isOpen={activeReceipt !== null}
         onClose={() => setActiveReceipt(null)}
         title="Detail Struk Kasir"
-        description="Nota transaksi arsip penjualan KulaPOS"
+        description="Nota transaksi arsip penjualan AmirPOS"
         maxWidth="sm"
       >
         {activeReceipt && (
@@ -378,7 +378,7 @@ export function TransactionsClient() {
               }`}
             >
               <div className="text-center pb-2 border-b border-dashed border-stone-300">
-                <div className="font-bold text-sm tracking-tight">KulaPOS</div>
+                <div className="font-bold text-sm tracking-tight">AmirPOS</div>
                 <div className="text-[10px] text-stone-600">
                   {activeReceipt.businessMode === 'retail' ? 'Retail & Toko UMKM' : 'Kedai Kopi & Kuliner'}
                 </div>
@@ -480,7 +480,7 @@ export function TransactionsClient() {
               </div>
 
               <div className="text-center pt-2 border-t border-dashed border-stone-300 text-[10px] text-stone-500">
-                Dokumen Arsip Sah KulaPOS
+                Dokumen Arsip Sah AmirPOS
               </div>
             </div>
 

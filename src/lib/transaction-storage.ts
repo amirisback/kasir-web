@@ -1,7 +1,7 @@
 import { Transaction, DailySalesSummary } from '@/types/pos';
 import { deductStockForTransaction } from './product-storage';
 
-const STORAGE_KEY = 'kulapos_transactions_v2';
+const STORAGE_KEY = 'amirpos_transactions_v2';
 
 // Initial demo transactions for first run (Dual-Mode: Retail + F&B)
 const INITIAL_DEMO_TRANSACTIONS: Transaction[] = [
@@ -19,7 +19,7 @@ const INITIAL_DEMO_TRANSACTIONS: Transaction[] = [
           id: 'fnb-01',
           sku: 'KOP-001',
           barcode: '899100100001',
-          name: 'Kula Latte Aren',
+          name: 'Amir Latte Aren',
           type: 'fnb',
           category: 'kopi',
           price: 26000,

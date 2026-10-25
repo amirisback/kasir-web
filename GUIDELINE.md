@@ -1,4 +1,4 @@
-# 📘 Project Guidelines — Amir App
+# 📘 Project Guidelines — AmirPOS
 
 > **⚠️ MANDATORY: Semua AI Agent WAJIB membaca file ini sebelum menulis kode apapun.**
 
@@ -8,7 +8,7 @@
 
 | Key            | Value                                    |
 | -------------- | ---------------------------------------- |
-| **App Name**   | Amir App                                 |
+| **App Name**   | AmirPOS                                  |
 | **Framework**  | Next.js 16.3.6 (App Router)              |
 | **React**      | React 19.3.0                             |
 | **Language**   | TypeScript 6.0.3 (Strict Mode)           |

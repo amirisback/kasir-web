@@ -1,11 +1,11 @@
-# Atomic Implementation Plan: KulaPOS (Kasir UMKM Modern)
+# Atomic Implementation Plan: AmirPOS (Kasir UMKM Modern)
 
-Rencana pengerjaan bertahap (Atomic Phases) untuk membangun website KulaPOS mengikuti standar Next.js 16, React 19, Tailwind CSS v4, PWA Serwist, dan GUIDELINE.md.
+Rencana pengerjaan bertahap (Atomic Phases) untuk membangun website AmirPOS mengikuti standar Next.js 16, React 19, Tailwind CSS v4, PWA Serwist, dan GUIDELINE.md.
 
 ---
 
 ## Ringkasan Proyek
-- **Aplikasi:** KulaPOS (Point of Sale F&B dan Coffee Shop UMKM)
+- **Aplikasi:** AmirPOS (Point of Sale F&B dan Coffee Shop UMKM)
 - **Framework:** Next.js 16.3.6 (App Router), React 19.3.0
 - **Styling:** Tailwind CSS v4.3.3 (@theme inline token system)
 - **Runtime & Package Manager:** Bun v1.4.2
@@ -17,7 +17,7 @@ Rencana pengerjaan bertahap (Atomic Phases) untuk membangun website KulaPOS meng
 ## Phase 1: Setup Lingkungan, Token Desain, & Pembersihan Rute Demo
 - [x] **P1.1 Pembersihan Rute Demo:** Hapus folder `src/app/demo-encryption/` sesuai mandat GUIDELINE.md poin 13 agar tidak mengotori build produksi.
 - [x] **P1.2 Setup Token Desain Tailwind CSS v4:** Perbarui `src/app/globals.css` dengan token warna Warm Amber (`#D97706`), Espresso Tone (`#1C1917`), Cream Parchment (`#FAF7F2`), serta aturan styling khusus `@media print` untuk cetak struk kasir thermal.
-- [x] **P1.3 Setup Metadata & PWA Manifest:** Perbarui `src/app/manifest.ts` dan metadata di `src/app/layout.tsx` agar sesuai identitas KulaPOS.
+- [x] **P1.3 Setup Metadata & PWA Manifest:** Perbarui `src/app/manifest.ts` dan metadata di `src/app/layout.tsx` agar sesuai identitas AmirPOS.
 - [x] **P1.4 Verifikasi Build Awal:** Jalankan `bun run lint` untuk memastikan pondasi bersih.
 
 ---
@@ -36,8 +36,8 @@ Rencana pengerjaan bertahap (Atomic Phases) untuk membangun website KulaPOS meng
 ---
 
 ## Phase 3: Komponen Navigasi & Tata Letak Bersama (Shared Layout)
-- [x] **P3.1 Header KulaPOS:** Buat `src/app/_components/header.tsx` dengan logo KulaPOS, tautan navigasi aktif (`/`, `/pos`, `/transaksi`), indikator status register ("Buka"), dan jam digital lokal.
-- [x] **P3.2 Footer KulaPOS:** Buat `src/app/_components/footer.tsx` yang ringkas, fungsional, dan ramah mobile.
+- [x] **P3.1 Header AmirPOS:** Buat `src/app/_components/header.tsx` dengan logo AmirPOS, tautan navigasi aktif (`/`, `/pos`, `/transaksi`), indikator status register ("Buka"), dan jam digital lokal.
+- [x] **P3.2 Footer AmirPOS:** Buat `src/app/_components/footer.tsx` yang ringkas, fungsional, dan ramah mobile.
 - [x] **P3.3 Integrasi Layout Root:** Pastikan `src/app/layout.tsx` menyematkan header dan footer secara rapi dan tetap mempertahankan ThemeProvider tanpa FOUC.
 
 ---

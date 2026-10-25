@@ -3,7 +3,7 @@
 import { useSyncExternalStore, useCallback, useMemo } from 'react';
 import { MenuItem, CartItem, OrderType, BusinessMode, ProductVariant } from '@/types/pos';
 
-const CART_STORAGE_KEY = 'kulapos_active_cart_v2';
+const CART_STORAGE_KEY = 'amirpos_active_cart_v2';
 
 export interface CartState {
   items: CartItem[];

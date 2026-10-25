@@ -1,12 +1,12 @@
-# Spesifikasi Desain KulaPOS: Kasir UMKM F&B & Coffee Shop Modern
+# Spesifikasi Desain AmirPOS: Kasir UMKM F&B & Coffee Shop Modern
 
-Dokumen spesifikasi arsitektur dan antarmuka untuk aplikasi KulaPOS berbasis Next.js 16, React 19, Tailwind CSS v4, dan Serwist PWA.
+Dokumen spesifikasi arsitektur dan antarmuka untuk aplikasi AmirPOS berbasis Next.js 16, React 19, Tailwind CSS v4, dan Serwist PWA.
 
 ---
 
 ## 1. Ringkasan Produk & Sasaran
 
-- **Nama Aplikasi:** KulaPOS (Kasir Kuliner & Coffee Shop)
+- **Nama Aplikasi:** AmirPOS (Kasir Kuliner & Coffee Shop)
 - **Tujuan:** Menyediakan antarmuka Point of Sale (POS) yang cepat, intuitif, dan responsif untuk kasir kedai kopi dan usaha kuliner UMKM.
 - **Karakter Visual:** Nuansa Warm Coffee & Artisan Bistro (Warm Amber, Terracotta, dan Espresso Charcoal).
 - **Target Pengguna:** Pemilik kedai, kasir, dan barista dewasa yang membutuhkan transaksi cepat dengan kesalahan input minimal.
@@ -80,7 +80,7 @@ Dokumen spesifikasi arsitektur dan antarmuka untuk aplikasi KulaPOS berbasis Nex
    - Mode QRIS: Tampilan QR code statis simulasi dan petunjuk scan.
    - Mode Debit: Input simulasi nomor referensi kartu.
 4. **Modal Struk Transaksi Digital & Cetak:**
-   - Tampilan nota kasir formal (Nama kedai KulaPOS, ID Transaksi, Tanggal/Waktu, Kasir, Rincian Pesanan, Subtotal, Pajak, Total, Bayar, Kembalian).
+   - Tampilan nota kasir formal (Nama kedai AmirPOS, ID Transaksi, Tanggal/Waktu, Kasir, Rincian Pesanan, Subtotal, Pajak, Total, Bayar, Kembalian).
    - Tombol "Cetak Struk" (terhubung ke dialog cetak browser dengan format CSS cetak thermal `@media print`).
    - Tombol "Transaksi Baru" (mengosongkan keranjang dan siap menerima pesanan berikutnya).
 

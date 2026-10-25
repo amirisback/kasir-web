@@ -8,7 +8,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-foreground">KulaPOS</span>
+            <span className="font-semibold text-foreground">AmirPOS</span>
             <span>&bull;</span>
             <span>Solusi Kasir Digital UMKM Retail Toko &amp; F&amp;B Kafe</span>
           </div>
@@ -18,7 +18,7 @@ export function Footer() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               PWA Offline Ready
             </span>
-            <span>&copy; {currentYear} KulaPOS</span>
+            <span>&copy; {currentYear} AmirPOS</span>
           </div>
         </div>
       </div>

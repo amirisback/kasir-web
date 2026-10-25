@@ -29,7 +29,7 @@
 ### Task 2: Persistent Product Storage & Stock Engine
 - [ ] Buat `src/lib/product-storage.ts`:
   - Reactive store dengan `subscribeProducts` dan `getProductsSnapshot`.
-  - Simpan ke `localStorage` (`kulapos_products_v2`) dengan fallback ke data katalog `menu.json`.
+  - Simpan ke `localStorage` (`amirpos_products_v2`) dengan fallback ke data katalog `menu.json`.
   - Fungsi `saveProduct(item: ProductItem)`, `deleteProduct(id: string)`, `updateStock(id: string, delta: number)`.
   - Fungsi `resetToDefaultProducts()`.
 - [ ] Buat unit test di `src/lib/__tests__/product-storage.test.ts`.

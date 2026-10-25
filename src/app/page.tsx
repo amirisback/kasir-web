@@ -41,7 +41,7 @@ export default async function HomePage() {
                 <span>Dual-Mode Point of Sale: Retail Toko &amp; F&amp;B Kafe</span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                Pusat Operasional Kasir <span className="text-primary">KulaPOS</span>
+                Pusat Operasional Kasir <span className="text-primary">AmirPOS</span>
               </h1>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                 Kelola penjualan toko retail via barcode scanner maupun pesanan kedai kafe dengan nomor meja. 

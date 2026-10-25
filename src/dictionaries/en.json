@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "KulaPOS",
+    "appName": "AmirPOS",
     "loading": "Loading...",
     "error": "An error occurred",
     "retry": "Try Again",
@@ -30,7 +30,7 @@
     "system": "System"
   },
   "metadata": {
-    "title": "KulaPOS: Retail Shop & F&B Cafe Point of Sale",
+    "title": "AmirPOS: Retail Shop & F&B Cafe Point of Sale",
     "description": "Modern, fast, and responsive Point of Sale web application for retail stores and culinary coffee shops."
   },
   "error": {
@@ -41,7 +41,7 @@
     "goHome": "Back to Home"
   },
   "footer": {
-    "copyright": "© {year} KulaPOS. Digital POS Solution for Retail & F&B Businesses.",
+    "copyright": "© {year} AmirPOS. Digital POS Solution for Retail & F&B Businesses.",
     "madeWith": "Built for seamless small business cashier operations."
   }
 }

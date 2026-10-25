@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "KulaPOS",
+    "appName": "AmirPOS",
     "loading": "Memuat...",
     "error": "Terjadi kesalahan",
     "retry": "Coba Lagi",
@@ -30,7 +30,7 @@
     "system": "Sistem"
   },
   "metadata": {
-    "title": "KulaPOS: Kasir UMKM Retail Toko & F&B Kafe",
+    "title": "AmirPOS: Kasir UMKM Retail Toko & F&B Kafe",
     "description": "Aplikasi Point of Sale (POS) modern, cepat, dan responsif untuk UMKM toko retail dan kedai kuliner/kafe."
   },
   "error": {
@@ -41,7 +41,7 @@
     "goHome": "Kembali ke Beranda"
   },
   "footer": {
-    "copyright": "© {year} KulaPOS. Solusi Kasir Digital UMKM Retail & F&B.",
+    "copyright": "© {year} AmirPOS. Solusi Kasir Digital UMKM Retail & F&B.",
     "madeWith": "Dibuat untuk kemudahan operasional kasir UMKM."
   }
 }

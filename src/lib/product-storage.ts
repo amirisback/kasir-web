@@ -1,7 +1,7 @@
 import { MenuItem, CartItem } from '@/types/pos';
 import defaultProductsRaw from '@/data/menu.json';
 
-const PRODUCTS_STORAGE_KEY = 'kulapos_products_v2';
+const PRODUCTS_STORAGE_KEY = 'amirpos_products_v2';
 
 const INITIAL_PRODUCTS: MenuItem[] = defaultProductsRaw as MenuItem[];
 

@@ -295,7 +295,7 @@ export function PosClient({ initialMenuItems }: PosClientProps) {
     if (!latestTransaction) return;
     const t = latestTransaction;
     const text = [
-      `=== KulaPOS (${t.businessMode === 'retail' ? 'RETAIL' : 'F&B'}) ===`,
+      `=== AmirPOS (${t.businessMode === 'retail' ? 'RETAIL' : 'F&B'}) ===`,
       `No: ${t.orderNumber} | ID: ${t.id}`,
       `Waktu: ${new Date(t.timestamp).toLocaleString('id-ID')}`,
       `Pelanggan: ${t.customerName}`,
@@ -1064,7 +1064,7 @@ export function PosClient({ initialMenuItems }: PosClientProps) {
               }`}
             >
               <div className="text-center pb-2 border-b border-dashed border-stone-300">
-                <div className="font-bold text-sm tracking-tight">KulaPOS</div>
+                <div className="font-bold text-sm tracking-tight">AmirPOS</div>
                 <div className="text-[10px] text-stone-600">
                   {latestTransaction.businessMode === 'retail' ? 'Retail & Toko UMKM' : 'Kedai Kopi & Kuliner'}
                 </div>

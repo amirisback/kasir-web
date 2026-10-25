@@ -8,8 +8,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getCurrentDictionary();
 
   return generatePageSeo({
-    title: 'Riwayat Transaksi - KulaPOS',
-    description: 'Daftar riwayat nota penjualan kasir dan rekapan omzet harian KulaPOS.',
+    title: 'Riwayat Transaksi - AmirPOS',
+    description: 'Daftar riwayat nota penjualan kasir dan rekapan omzet harian AmirPOS.',
     locale,
     pathname: '/transaksi',
   });

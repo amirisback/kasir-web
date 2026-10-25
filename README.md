@@ -1,6 +1,6 @@
-# 🛒 KulaPOS: Aplikasi Kasir Web Dual-Mode (Retail & F&B)
+# 🛒 AmirPOS: Aplikasi Kasir Web Dual-Mode (Retail & F&B)
 
-**KulaPOS** adalah aplikasi kasir (*Point of Sale* / POS) berbasis web modern yang dirancang untuk kebutuhan operasional UMKM, baik toko retail/kelontong maupun kedai kafe, kuliner, dan resto. Dibangun menggunakan **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, dan **TypeScript (Strict Mode)** dengan kapabilitas **Progressive Web App (PWA)** *offline-first*.
+**AmirPOS** adalah aplikasi kasir (*Point of Sale* / POS) berbasis web modern yang dirancang untuk kebutuhan operasional UMKM, baik toko retail/kelontong maupun kedai kafe, kuliner, dan resto. Dibangun menggunakan **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, dan **TypeScript (Strict Mode)** dengan kapabilitas **Progressive Web App (PWA)** *offline-first*.
 
 Aplikasi ini mengintegrasikan mesin kasir dual-mode yang fleksibel, pemindaian barcode USB, manajemen varian menu, kalkulasi diskon & pajak dinamis, manajemen inventori stok lokal, cetak struk thermal (58mm & 80mm), serta dasbor riwayat transaksi dan rekap omzet harian.
 
@@ -41,7 +41,7 @@ Aplikasi ini mengintegrasikan mesin kasir dual-mode yang fleksibel, pemindaian b
 * Fitur cetak ulang struk nota penjualan lampau kapan saja.
 
 ### 6. Arsitektur Reaktif & Offline-First
-* State management berbasis `useSyncExternalStore` dengan sinkronisasi ke `localStorage` (`kulapos_products_v2` dan `kulapos_transactions_v2`).
+* State management berbasis `useSyncExternalStore` dengan sinkronisasi ke `localStorage` (`amirpos_products_v2` dan `amirpos_transactions_v2`).
 * Menjamin konsistensi data (*referential stability*), mencegah *hydration mismatch* SSR, serta mendukung operasi kasir tanpa ketergantungan koneksi internet.
 
 ### 7. Keamanan Jaringan & Proteksi Edge (Proxy)
@@ -191,7 +191,7 @@ bun start
 
 ## ⌨️ Pintasan Keyboard Kasir
 
-Untuk mempercepat kerja kasir di lapangan, KulaPOS mendukung beberapa pintasan keyboard praktis:
+Untuk mempercepat kerja kasir di lapangan, AmirPOS mendukung beberapa pintasan keyboard praktis:
 
 | Tombol / Pintasan | Aksi |
 | ----------------- | ---- |
@@ -205,7 +205,7 @@ Untuk mempercepat kerja kasir di lapangan, KulaPOS mendukung beberapa pintasan k
 
 Nota struk kasir didesain khusus agar pas di printer thermal tanpa potongan terpotong:
 
-1. **Header Struk**: Nama toko (KulaPOS), alamat, waktu transaksi, dan nomor order.
+1. **Header Struk**: Nama toko (AmirPOS), alamat, waktu transaksi, dan nomor order.
 2. **Keterangan Pesanan**: Nomor meja dan jenis pemesanan (untuk F&B), atau nama pembeli (untuk Retail).
 3. **Daftar Barang**: Nama barang, nama varian terpilih, kuantitas, harga satuan, dan subtotal.
 4. **Rincian Finansial**: Subtotal, nominal diskon, tarif & nilai pajak, serta total tagihan akhir.

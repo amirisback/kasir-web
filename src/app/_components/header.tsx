@@ -63,7 +63,7 @@ export function Header() {
               </span>
               <div className="flex flex-col">
                 <span className="leading-tight tracking-tight text-foreground font-extrabold text-base sm:text-lg">
-                  Kula<span className="text-primary">POS</span>
+                  Amir<span className="text-primary">POS</span>
                 </span>
                 <span className="text-[10px] text-muted-foreground font-normal tracking-wide">
                   Retail Toko &amp; F&amp;B Kafe
