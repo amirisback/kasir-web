@@ -1,32 +1,43 @@
 'use client';
 
 import { useSyncExternalStore, useCallback, useMemo } from 'react';
-import { MenuItem, CartItem, OrderType } from '@/types/pos';
+import { MenuItem, CartItem, OrderType, BusinessMode, ProductVariant } from '@/types/pos';
 
-const CART_STORAGE_KEY = 'kulapos_active_cart_v1';
+const CART_STORAGE_KEY = 'kulapos_active_cart_v2';
 
-interface CartState {
+export interface CartState {
   items: CartItem[];
+  businessMode: BusinessMode;
   orderType: OrderType;
   customerName: string;
   tableNumber: string;
+  discountAmount: number;
+  taxRate: number; // 0, 0.1, or 0.11
 }
 
 const defaultState: CartState = {
   items: [],
+  businessMode: 'fnb',
   orderType: 'dine_in',
   customerName: '',
   tableNumber: '',
+  discountAmount: 0,
+  taxRate: 0.1, // Default 10% PB1
 };
 
 let currentCartState: CartState = defaultState;
-const listeners = new Set<() => void>();
+const cartListeners = new Set<() => void>();
 
-function notifyListeners() {
-  listeners.forEach((listener) => listener());
+function notifyCartListeners(): void {
+  cartListeners.forEach((listener) => listener());
 }
 
-function loadInitialState(): CartState {
+export function getCartItemKey(item: CartItem): string {
+  const variantPart = item.selectedVariant ? `::${item.selectedVariant.id}` : '';
+  return `${item.menuItem.id}${variantPart}`;
+}
+
+function loadInitialCartState(): CartState {
   if (typeof window === 'undefined') return defaultState;
   try {
     const raw = localStorage.getItem(CART_STORAGE_KEY);
@@ -34,9 +45,12 @@ function loadInitialState(): CartState {
       const parsed = JSON.parse(raw);
       return {
         items: Array.isArray(parsed.items) ? parsed.items : [],
-        orderType: parsed.orderType || 'dine_in',
+        businessMode: parsed.businessMode === 'retail' ? 'retail' : 'fnb',
+        orderType: parsed.orderType || (parsed.businessMode === 'retail' ? 'direct_sale' : 'dine_in'),
         customerName: parsed.customerName || '',
         tableNumber: parsed.tableNumber || '',
+        discountAmount: Number(parsed.discountAmount) || 0,
+        taxRate: typeof parsed.taxRate === 'number' ? parsed.taxRate : 0.1,
       };
     }
   } catch {
@@ -46,10 +60,10 @@ function loadInitialState(): CartState {
 }
 
 if (typeof window !== 'undefined') {
-  currentCartState = loadInitialState();
+  currentCartState = loadInitialCartState();
 }
 
-function setCartState(updater: (prev: CartState) => CartState) {
+function setCartState(updater: (prev: CartState) => CartState): void {
   currentCartState = updater(currentCartState);
   if (typeof window !== 'undefined') {
     try {
@@ -58,49 +72,87 @@ function setCartState(updater: (prev: CartState) => CartState) {
       // Ignore storage error
     }
   }
-  notifyListeners();
+  notifyCartListeners();
 }
 
-function subscribe(callback: () => void) {
-  listeners.add(callback);
+function subscribeCart(callback: () => void): () => void {
+  cartListeners.add(callback);
   return () => {
-    listeners.delete(callback);
+    cartListeners.delete(callback);
   };
 }
 
-function getSnapshot(): CartState {
+function getCartSnapshot(): CartState {
   return currentCartState;
 }
 
-function getServerSnapshot(): CartState {
+function getCartServerSnapshot(): CartState {
   return defaultState;
 }
 
 export function usePosCart() {
-  const state = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const state = useSyncExternalStore(subscribeCart, getCartSnapshot, getCartServerSnapshot);
 
-  const addItem = useCallback((menuItem: MenuItem) => {
-    setCartState((prev) => {
-      const existingIndex = prev.items.findIndex(
-        (i) => i.menuItem.id === menuItem.id
-      );
-      if (existingIndex > -1) {
-        const nextItems = [...prev.items];
-        nextItems[existingIndex] = {
-          ...nextItems[existingIndex],
-          quantity: nextItems[existingIndex].quantity + 1,
+  const addItem = useCallback(
+    (menuItem: MenuItem, variant?: ProductVariant, qty: number = 1) => {
+      setCartState((prev) => {
+        const targetVariantId = variant?.id;
+        const existingIndex = prev.items.findIndex(
+          (i) => i.menuItem.id === menuItem.id && i.selectedVariant?.id === targetVariantId
+        );
+
+        if (existingIndex > -1) {
+          const nextItems = [...prev.items];
+          nextItems[existingIndex] = {
+            ...nextItems[existingIndex],
+            quantity: nextItems[existingIndex].quantity + qty,
+          };
+          return { ...prev, items: nextItems };
+        }
+
+        return {
+          ...prev,
+          items: [
+            ...prev.items,
+            {
+              menuItem,
+              quantity: qty,
+              selectedVariant: variant,
+              itemDiscount: 0,
+            },
+          ],
         };
-        return { ...prev, items: nextItems };
-      }
-      return { ...prev, items: [...prev.items, { menuItem, quantity: 1 }] };
-    });
-  }, []);
+      });
+    },
+    []
+  );
 
-  const updateQuantity = useCallback((menuItemId: string, delta: number) => {
+  const scanBarcode = useCallback(
+    (barcodeOrSku: string, catalog: MenuItem[]): { success: boolean; item?: MenuItem } => {
+      if (!barcodeOrSku || !Array.isArray(catalog)) return { success: false };
+      const query = barcodeOrSku.trim().toLowerCase();
+      if (!query) return { success: false };
+
+      const found = catalog.find(
+        (p) =>
+          (Boolean(p?.barcode) && p.barcode?.toLowerCase() === query) ||
+          (Boolean(p?.sku) && p.sku?.toLowerCase() === query)
+      );
+
+      if (found) {
+        addItem(found);
+        return { success: true, item: found };
+      }
+      return { success: false };
+    },
+    [addItem]
+  );
+
+  const updateQuantity = useCallback((itemKey: string, delta: number) => {
     setCartState((prev) => {
       const nextItems = prev.items
         .map((item) => {
-          if (item.menuItem.id === menuItemId) {
+          if (getCartItemKey(item) === itemKey) {
             const nextQty = item.quantity + delta;
             return nextQty > 0 ? { ...item, quantity: nextQty } : null;
           }
@@ -111,19 +163,29 @@ export function usePosCart() {
     });
   }, []);
 
-  const removeItem = useCallback((menuItemId: string) => {
+  const removeItem = useCallback((itemKey: string) => {
     setCartState((prev) => ({
       ...prev,
-      items: prev.items.filter((item) => item.menuItem.id !== menuItemId),
+      items: prev.items.filter((item) => getCartItemKey(item) !== itemKey),
     }));
   }, []);
 
-  const updateNotes = useCallback((menuItemId: string, notes: string) => {
+  const updateNotes = useCallback((itemKey: string, notes: string) => {
     setCartState((prev) => ({
       ...prev,
       items: prev.items.map((item) =>
-        item.menuItem.id === menuItemId ? { ...item, notes } : item
+        getCartItemKey(item) === itemKey ? { ...item, notes } : item
       ),
+    }));
+  }, []);
+
+  const setBusinessMode = useCallback((mode: BusinessMode) => {
+    setCartState((prev) => ({
+      ...prev,
+      businessMode: mode,
+      orderType: mode === 'retail' ? 'direct_sale' : prev.orderType === 'direct_sale' ? 'dine_in' : prev.orderType,
+      // Retail default tax 0% unless customized, F&B default 10%
+      taxRate: mode === 'retail' ? 0 : 0.1,
     }));
   }, []);
 
@@ -139,29 +201,53 @@ export function usePosCart() {
     setCartState((prev) => ({ ...prev, tableNumber }));
   }, []);
 
-  const clearCart = useCallback(() => {
-    setCartState(() => ({
-      items: [],
-      orderType: 'dine_in',
-      customerName: '',
-      tableNumber: '',
+  const setDiscountAmount = useCallback((discountAmount: number) => {
+    setCartState((prev) => ({
+      ...prev,
+      discountAmount: Math.max(0, discountAmount),
     }));
   }, []);
 
+  const setTaxRate = useCallback((taxRate: number) => {
+    setCartState((prev) => ({
+      ...prev,
+      taxRate: Math.max(0, taxRate),
+    }));
+  }, []);
+
+  const clearCart = useCallback(() => {
+    setCartState((prev) => ({
+      ...prev,
+      items: [],
+      customerName: '',
+      tableNumber: '',
+      discountAmount: 0,
+    }));
+  }, []);
+
+  // Price calculations
   const subtotal = useMemo(() => {
-    return state.items.reduce(
-      (sum, item) => sum + item.menuItem.price * item.quantity,
-      0
-    );
+    return state.items.reduce((sum, item) => {
+      const basePrice = Number(item?.menuItem?.price) || 0;
+      const variantDelta = Number(item?.selectedVariant?.priceDelta) || 0;
+      const itemDisc = Number(item?.itemDiscount) || 0;
+      const unitTotal = Math.max(0, basePrice + variantDelta - itemDisc);
+      const qty = Math.max(1, Number(item?.quantity) || 1);
+      return sum + unitTotal * qty;
+    }, 0);
   }, [state.items]);
 
+  const effectiveSubtotal = useMemo(() => {
+    return Math.max(0, subtotal - state.discountAmount);
+  }, [subtotal, state.discountAmount]);
+
   const tax = useMemo(() => {
-    return Math.round(subtotal * 0.1); // PB1 10%
-  }, [subtotal]);
+    return Math.round(effectiveSubtotal * state.taxRate);
+  }, [effectiveSubtotal, state.taxRate]);
 
   const total = useMemo(() => {
-    return subtotal + tax;
-  }, [subtotal, tax]);
+    return effectiveSubtotal + tax;
+  }, [effectiveSubtotal, tax]);
 
   const totalItems = useMemo(() => {
     return state.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -169,20 +255,28 @@ export function usePosCart() {
 
   return {
     items: state.items,
+    businessMode: state.businessMode,
     orderType: state.orderType,
     customerName: state.customerName,
     tableNumber: state.tableNumber,
+    discountAmount: state.discountAmount,
+    taxRate: state.taxRate,
     subtotal,
+    effectiveSubtotal,
     tax,
     total,
     totalItems,
     addItem,
+    scanBarcode,
     updateQuantity,
     removeItem,
     updateNotes,
+    setBusinessMode,
     setOrderType,
     setCustomerName,
     setTableNumber,
+    setDiscountAmount,
+    setTaxRate,
     clearCart,
   };
 }

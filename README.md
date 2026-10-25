@@ -1,210 +1,228 @@
-# 🚀 Init Next.js App — Amir App
+# 🛒 KulaPOS: Aplikasi Kasir Web Dual-Mode (Retail & F&B)
 
-Selamat datang di **Amir App**, template Next.js 16 modern berbasis **React 19**, **Tailwind CSS v4.3**, dan **TypeScript 6 (Strict Mode)** dengan dukungan Progressive Web App (PWA) serta integrasi i18n native berbasis cookie tanpa URL prefix.
+**KulaPOS** adalah aplikasi kasir (*Point of Sale* / POS) berbasis web modern yang dirancang untuk kebutuhan operasional UMKM, baik toko retail/kelontong maupun kedai kafe, kuliner, dan resto. Dibangun menggunakan **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, dan **TypeScript (Strict Mode)** dengan kapabilitas **Progressive Web App (PWA)** *offline-first*.
 
-Repositori ini dioptimalkan secara mendalam menggunakan **Bun** sebagai pengelola paket, konfigurasi **ESLint v9**, serta dilengkapi dengan **ID Security Suite** bawaan untuk pengamanan identitas data Anda.
+Aplikasi ini mengintegrasikan mesin kasir dual-mode yang fleksibel, pemindaian barcode USB, manajemen varian menu, kalkulasi diskon & pajak dinamis, manajemen inventori stok lokal, cetak struk thermal (58mm & 80mm), serta dasbor riwayat transaksi dan rekap omzet harian.
 
 ---
 
-## 📊 Arsitektur Pengamanan ID (ID Security Suite)
+## ⚡ Fitur Utama
 
-Berikut adalah visualisasi alur pemrosesan data pada dua fitur keamanan utama (Sqids & AES-256-GCM) yang terintegrasi di dalam template ini:
+### 1. Dual-Mode POS Engine (Retail & F&B)
+* **Mode Retail (Toko Kelontong & Minimarket)**:
+  * Pemindaian barcode cepat menggunakan USB Barcode Scanner gun maupun input manual (shortcut keyboard `/`).
+  * Tampilan informasi SKU, barcode produk, satuan unit, dan stok sisa secara *real-time*.
+  * Alur kasir langsung ke nama pembeli dan pembayaran tanpa memerlukan nomor meja.
+* **Mode F&B (Kedai Kopi, Kafe & Kuliner)**:
+  * Dukungan manajemen Nomor Meja dan tipe pemesanan (*Dine In* / *Take Away*).
+  * Pemilihan varian menu fleksibel (misal: Regular/Large, Ice/Hot, Topping) dengan penyesuaian harga (`priceDelta`).
+  * Catatan pesanan khusus (*custom notes*) per item (misal: "less sugar", "tanpa es").
+
+### 2. Transaksi & Kalkulasi Finansial Fleksibel
+* **Multi-Metode Pembayaran**: Mendukung pembayaran Tunai (dengan kalkulator uang diterima dan hitung kembalian otomatis), QRIS, Kartu Debit, dan Transfer Bank.
+* **Diskon Dinamis**: Input potongan diskon nominal per transaksi secara langsung di register kasir.
+* **Pajak Fleksibel**: Pilihan tarif pajak sesuai regulasi usaha (0% Bebas Pajak, 10% PB1 Resto/Kafe, atau 11% PPN).
+
+### 3. Cetak Struk Thermal (58mm & 80mm)
+* Format nota kasir formal siap cetak langsung via dialog printer peramban (`window.print()`).
+* Pilihan lebar kertas struk:
+  * **58mm**: Format kompak untuk printer kasir thermal portable atau Bluetooth.
+  * **80mm**: Format standar untuk printer kasir thermal desktop USB/LAN.
+* CSS print teroptimasi (`@media print`) yang menghilangkan elemen browser seperti header, footer, dan margin yang tidak diinginkan.
+
+### 4. Manajemen Produk & Pengurangan Stok Otomatis
+* Penambahan, pengeditan, dan penghapusan produk langsung dari antarmuka register kasir.
+* Pengurangan stok produk secara otomatis dan aman setiap kali transaksi penjualan berhasil diselesaikan.
+* Tombol reset data katalog kembali ke setelan default awal untuk mempermudah simulasi atau pengujian.
+
+### 5. Dasbor Riwayat & Laporan Omzet
+* Pantau metrik ringkasan penjualan harian: Total Omzet, Total Transaksi, Rata-rata Nilai Pesanan (*Average Order Value*), serta perbandingan omzet Retail vs F&B.
+* Pencarian dan penyaringan riwayat nota berdasarkan nomor order, nama pelanggan, mode bisnis, metode pembayaran, dan tipe pesanan.
+* Fitur cetak ulang struk nota penjualan lampau kapan saja.
+
+### 6. Arsitektur Reaktif & Offline-First
+* State management berbasis `useSyncExternalStore` dengan sinkronisasi ke `localStorage` (`kulapos_products_v2` dan `kulapos_transactions_v2`).
+* Menjamin konsistensi data (*referential stability*), mencegah *hydration mismatch* SSR, serta mendukung operasi kasir tanpa ketergantungan koneksi internet.
+
+### 7. Keamanan Jaringan & Proteksi Edge (Proxy)
+* Middleware keamanan di `src/proxy.ts` yang memblokir pemindaian path mencurigakan (probe traversal, file sensitif `.env`, config).
+* Filter pencegahan bot otomatis dan pemindai kerentanan (*malicious vulnerability scanners*).
+* Sistem pembatas laju permintaan (*Rate Limiter*) berbasis sliding-window token bucket dengan header `X-RateLimit-*`.
+
+---
+
+## 🏗️ Arsitektur Alur Transaksi Kasir
 
 ```mermaid
 graph TD
-    Input[("Input ID / Teks")] --> Decision{"Pilih Metode Keamanan"}
+    User(["Kasir / Operator"]) --> ModeChoice{"Pilih Mode Kasir"}
     
-    %% Obfuscation Path (Sqids)
-    Decision -- "Penyamaran ID (Sqids)" --> SqidsBlock["lib/obfuscator.ts (Sqids)"]
-    SqidsBlock --> |"Encode (Positive Integer)"| ObfHash["Obfuscated Hash (misal: o7vL39)"]
-    ObfHash --> |"Deobfuscate"| SqidsBlock
+    %% Alur Retail
+    ModeChoice -- "Mode Retail" --> ScanInput["Scan Barcode / Cari SKU"]
+    ScanInput --> DirectAdd["Tambah ke Keranjang Kasir"]
     
-    %% Encryption Path (AES)
-    Decision -- "Enkripsi Kriptografis (AES-256-GCM)" --> ServerAction["app/demo-encryption/actions.ts (use server)"]
-    ServerAction --> |"Membaca ENCRYPTION_KEY"| AESGCM["lib/crypto.ts (AES-256-GCM)"]
-    AESGCM --> |"Encrypt & Sign"| EncToken["Base64 URL-Safe Encrypted Token"]
-    EncToken --> |"Decrypt & Verify"| AESGCM
+    %% Alur F&B
+    ModeChoice -- "Mode F&B" --> ClickMenu["Pilih Menu Kuliner"]
+    ClickMenu --> VariantCheck{"Ada Varian Menu?"}
+    VariantCheck -- "Ya" --> VariantModal["Pilih Varian & Catatan"]
+    VariantCheck -- "Tidak" --> DirectAdd
+    VariantModal --> DirectAdd
     
-    %% UI Presentation
-    ObfHash --> UI["Demo Interface / URL SearchParams"]
-    EncToken --> UI
-    
-    style Decision fill:#1a1a1a,stroke:#333,stroke-width:2px,color:#fff
-    style SqidsBlock fill:#312e81,stroke:#4338ca,color:#fff
-    style AESGCM fill:#064e3b,stroke:#047857,color:#fff
-    style ServerAction fill:#0f172a,stroke:#1e293b,color:#fff
+    %% Checkout & Storage
+    DirectAdd --> CartReview["Cek Keranjang (Diskon & Pajak)"]
+    CartReview --> PaymentModal["Modal Pembayaran (Tunai / QRIS / Debit)"]
+    PaymentModal --> ProcessTrx["Simpan Transaksi (lib/transaction-storage.ts)"]
+    ProcessTrx --> StockDeduct["Potong Stok Otomatis (lib/product-storage.ts)"]
+    StockDeduct --> ThermalReceipt["Tampilkan Struk Thermal (58mm / 80mm)"]
+    ThermalReceipt --> PrintOut["Cetak Nota Fisik via Printer Thermal"]
 ```
 
 ---
 
-## ✨ Fitur Utama
+## 📁 Struktur Direktori Proyek
 
-1. **Next.js 16 (App Router)** & **React 19**: Memanfaatkan fitur rendering server terbaru (*Server Components by default*).
-2. **Tailwind CSS v4.3 & Theming**: Styling modern berbasis CSS variables (`@theme inline`) dilengkapi `ThemeSwitcher` (`next-themes`) untuk Dark 🌙, Light ☀️, dan System 💻 mode.
-3. **Serwist PWA v9.5**: Service worker luring (*offline-first*) yang tangguh untuk mendukung Progressive Web Application.
-4. **Cookie-Based Native i18n**: Sistem lokalisasi native berbasis cookie `NEXT_LOCALE` tanpa prefix URL `[lang]`, menjaga URL tetap bersih (`/`, `/demo-encryption`). Mendukung Bahasa Indonesia (default: `id`) dan Inggris (`en`).
-5. **ID Security Suite**:
-   * **Sqids Obfuscation**: Mengubah ID integer database (auto-increment) menjadi hash unik ramah URL untuk menyembunyikan detail sensitif database.
-   * **AES-256-GCM Cryptography**: Enkripsi dua arah terautentikasi (*tamper-proof*) berbasis server untuk menjaga privasi data sensitif seperti UUID atau string transaksi.
-6. **Continuous Integration (CI)**: Pipeline GitHub Actions otomatis untuk mendeteksi error linter dan memverifikasi build aplikasi pada setiap Pull Request ke cabang `master`.
+```
+kasir-web/
+├── public/                     # Aset statis, ikon PWA, dan service worker
+├── src/                        # 📂 Seluruh source code aplikasi
+│   ├── app/                    # Next.js App Router
+│   │   ├── _components/        # Komponen UI global (Header, Footer, Metrics, UI kit)
+│   │   │   ├── overview-metrics.tsx # Kartu ringkasan omzet real-time
+│   │   │   ├── header.tsx      # Navigasi utama, jam kasir digital, status shift
+│   │   │   ├── footer.tsx      # Footer aplikasi
+│   │   │   └── ui/             # Button, Badge, Modal reusable
+│   │   ├── _hooks/             # Custom React Hooks
+│   │   │   ├── use-pos-cart.ts # State keranjang kasir, diskon, pajak, barcode scanner
+│   │   │   └── use-transactions.ts # Hook pembaca riwayat transaksi & metrik
+│   │   ├── pos/                # Halaman Register Kasir (POS)
+│   │   │   ├── page.tsx        # Server Component + Metadata SEO
+│   │   │   └── pos-client.tsx  # Register kasir dual-mode interaktif
+│   │   ├── transaksi/          # Halaman Riwayat Transaksi & Laporan
+│   │   │   ├── page.tsx        # Server Component + Metadata SEO
+│   │   │   └── transactions-client.tsx # Laporan penjualan, filter & cetak ulang
+│   │   ├── globals.css         # Styling Tailwind CSS v4 (@theme inline) & CSS Print
+│   │   ├── layout.tsx          # Root Layout (ThemeProvider, Font Geist, JSON-LD)
+│   │   ├── manifest.ts         # Manifest Web App (PWA)
+│   │   ├── page.tsx            # Beranda: ringkasan operasional & katalog unggulan
+│   │   ├── providers.tsx       # Provider wrapper tema (next-themes)
+│   │   ├── robots.ts           # Generator robots.txt
+│   │   ├── sitemap.ts          # Generator sitemap.xml
+│   │   └── sw.ts               # Service Worker Serwist (PWA offline caching)
+│   ├── data/                   # Data benih (Seed Data)
+│   │   └── menu.json           # Katalog awal produk Retail & F&B
+│   ├── dictionaries/           # File terjemahan i18n
+│   │   ├── id.json             # Bahasa Indonesia (Default)
+│   │   └── en.json             # English
+│   ├── i18n/                   # Konfigurasi locale
+│   │   └── config.ts           # Definisi bahasa yang didukung
+│   ├── lib/                    # Library & modul utilitas
+│   │   ├── __tests__/          # Rangkaian Unit Test (Vitest / Bun Test)
+│   │   ├── crypto.ts           # Modul enkripsi AES-256-GCM (server-only)
+│   │   ├── dictionaries.ts     # Loader dictionary (server-only)
+│   │   ├── i18n-actions.ts     # Server Action pengatur cookie bahasa
+│   │   ├── i18n-server.ts      # Pembaca locale & dictionary server-side
+│   │   ├── obfuscator.ts       # Obfuscator Sqids ID
+│   │   ├── product-storage.ts  # Mesin penyimpanan produk & pengurangan stok
+│   │   ├── rate-limiter.ts     # Token-bucket rate limiter sliding window
+│   │   ├── security-guards.ts  # Deteksi path mencurigakan & bot scanner
+│   │   ├── seo.ts              # Utilitas SEO & Schema.org JSON-LD
+│   │   └── transaction-storage.ts # Mesin penyimpanan riwayat transaksi kasir
+│   ├── proxy.ts                # Middleware keamanan & proteksi rate limiting
+│   └── types/                  # Definisi TypeScript
+│       └── pos.ts              # Tipe data domain kasir, item, transaksi, dan metrik
+├── cli/                        # Utilitas CLI pembantu
+├── docs/                       # Dokumentasi rancangan & rencana implementasi
+├── GUIDELINE.md                # 📌 Panduan arsitektur & standar pengkodean proyek
+├── next.config.ts              # Konfigurasi Next.js 16 & Serwist PWA
+├── tsconfig.json               # Konfigurasi TypeScript Strict
+├── eslint.config.mjs           # Konfigurasi ESLint v9 flat config
+└── package.json                # Skrip & dependensi proyek
+```
 
 ---
 
-## 📁 Struktur Folder Utama
+## 🚀 Panduan Memulai
 
-```
-Init-nextjs-app/
-├── .github/workflows/         # Pipeline CI GitHub Actions (Lint & Build)
-├── src/                       # 📂 Semua Source Code Utama
-│   ├── app/                   # Next.js App Router
-│   │   ├── _components/       # Komponen UI App-wide (ThemeSwitcher, LanguageSwitcher)
-│   │   ├── demo-encryption/   # Halaman & Komponen Demo Keamanan ID
-│   │   │   ├── actions.ts     # Server Actions (use server)
-│   │   │   ├── DemoClient.tsx # Komponen Interaktif Klien
-│   │   │   └── page.tsx       # Halaman utama demo (Server Component)
-│   │   ├── favicon.ico
-│   │   ├── globals.css        # Pengaturan CSS & Tema Tailwind v4
-│   │   ├── layout.tsx         # Root Layout (ThemeProvider, Metadata SEO)
-│   │   ├── manifest.ts        # Web App Manifest PWA
-│   │   ├── page.tsx           # Halaman Utama (Homepage i18n)
-│   │   ├── providers.tsx      # Provider Wrapper (next-themes ThemeProvider)
-│   │   ├── robots.ts          # Generator robots.txt
-│   │   ├── sitemap.ts         # Generator sitemap.xml
-│   │   └── sw.ts              # Service Worker (Serwist)
-│   ├── dictionaries/          # Berkas Terjemahan Bahasa (JSON)
-│   │   ├── id.json            # Bahasa Indonesia (Default)
-│   │   └── en.json            # Bahasa Inggris
-│   ├── i18n/                  # Konfigurasi i18n
-│   │   └── config.ts          # Config locale & tipe Locale
-│   ├── lib/                   # Utilitas Pendukung Server & Client
-│   │   ├── crypto.ts          # Enkripsi & Dekripsi AES-256-GCM (Server-Only)
-│   │   ├── dictionaries.ts    # Dictionary loader (Server-Only)
-│   │   ├── i18n-actions.ts    # Server Action pengubah cookie NEXT_LOCALE
-│   │   ├── i18n-server.ts     # Helper retrieval locale & dictionary (Server-Only)
-│   │   ├── obfuscator.ts      # Penyamaran & Pemulihan ID (Sqids)
-│   │   └── seo.ts             # Utilitas JSON-LD & SEO Metadata
-│   └── proxy.ts               # Proxy middleware ringan
-├── public/                    # Aset statis & Ikon PWA
-├── prompt_ai/                 # Prompt AI & panduan instruksi
-├── .env                       # Variabel environment umum
-├── .env.development           # Overrides dev lokal
-├── .env.production            # Overrides produksi (tanpa rahasia)
-├── .env.example               # Template referensi variabel environment
-├── AGENTS.md                  # Aturan khusus AI Agent (Next.js & Skills)
-├── GUIDELINE.md               # 📌 Panduan arsitektur & standar coding proyek
-├── next.config.ts             # Konfigurasi Next.js
-├── tsconfig.json              # Konfigurasi TypeScript Strict
-├── eslint.config.mjs          # Konfigurasi ESLint v9
-└── package.json               # Dependensi & skrip proyek
-```
-
----
-
-## 🛠️ Panduan Pengembangan
-
-### Prasyarat
-Pastikan Anda telah memasang **Bun** (≥ 1.3) di sistem lokal Anda.
+### Prasyarat Sistem
+* [Bun](https://bun.sh/) (versi ≥ 1.3 direkomendasikan) atau Node.js (versi ≥ 18)
 
 ### 1. Pemasangan Dependensi
-Pasang seluruh paket pustaka dengan cepat menggunakan Bun:
+Pasang paket dependensi proyek menggunakan Bun:
 ```bash
 bun install
 ```
 
-### 2. Jalankan Mode Pengembangan
-Jalankan server lokal untuk melihat hasil perubahan secara langsung:
+### 2. Menjalankan Server Pengembangan
+Jalankan dev server lokal:
 ```bash
 bun run dev
 ```
-Buka [http://localhost:3000](http://localhost:3000) di peramban Anda.
+Buka peramban di [http://localhost:3000](http://localhost:3000).
 
-### 3. Pemeriksaan Linter (ESLint)
-Pastikan kode Anda bebas dari error linter sebelum melakukan komit:
+* Halaman Utama: [http://localhost:3000/](http://localhost:3000/)
+* Mesin Kasir (POS): [http://localhost:3000/pos](http://localhost:3000/pos)
+* Riwayat Transaksi: [http://localhost:3000/transaksi](http://localhost:3000/transaksi)
+
+### 3. Menjalankan Pengujian (Unit Tests)
+Jalankan seluruh rangkaian unit test:
+```bash
+bun test
+```
+*Total 36 pengujian mencakup logika kalkulasi keranjang, referential stability storage, proteksi proxy, dan rate limiter.*
+
+### 4. Pemeriksaan Kode (Linting)
+Jalankan ESLint untuk memastikan kode mematuhi standar:
 ```bash
 bun run lint
 ```
 
-### 4. Build untuk Produksi
-Verifikasi kelayakan kompilasi proyek Next.js Anda:
+### 5. Kompilasi Produksi (Build)
+Verifikasi build produksi aplikasi:
 ```bash
 bun run build
 ```
 
----
-
-## 🌐 Panduan Penggunaan i18n (Internationalization)
-
-Pengaturan bahasa menggunakan cookie `NEXT_LOCALE` tanpa mengubah URL path.
-
-### Di Server Component:
-```typescript
-import { getCurrentDictionary } from "@/lib/i18n-server";
-
-export default async function Page() {
-  const { locale, dict } = await getCurrentDictionary();
-
-  return <h1>{dict.home.title}</h1>;
-}
-```
-
-### Di Client Component:
-Gunakan komponen `LanguageSwitcher` dari `@/app/_components/language-switcher`:
-```tsx
-import { LanguageSwitcher } from "@/app/_components/language-switcher";
-
-export function Header() {
-  return <LanguageSwitcher />;
-}
+Jalankan server produksi lokal:
+```bash
+bun start
 ```
 
 ---
 
-## 🔒 Panduan Penggunaan ID Security Suite
+## ⌨️ Pintasan Keyboard Kasir
 
-### 1. Penyamaran ID (Sqids)
-Cocok untuk mengubah angka ID database (seperti `10543`) menjadi hash string unik pendek seperti `o7vL39` untuk digunakan pada parameter URL tanpa menampilkan ID asli.
+Untuk mempercepat kerja kasir di lapangan, KulaPOS mendukung beberapa pintasan keyboard praktis:
 
-```typescript
-import { obfuscateId, deobfuscateId } from "@/lib/obfuscator";
-
-// Proses menyamarkan ID
-const hash = obfuscateId(10543);
-console.log(hash); // Output: "o7vL39" (panjang minimal 6 karakter)
-
-// Proses mengembalikan ke ID asli
-const originalId = deobfuscateId("o7vL39");
-console.log(originalId); // Output: 10543
-```
-
-### 2. Enkripsi Kriptografis (AES-256-GCM)
-Enkripsi terautentikasi super aman untuk mengenkripsi string sensitif secara bolak-balik menggunakan algoritma AES-256-GCM. Fitur ini dilindungi dengan pustaka `"server-only"` sehingga kunci rahasia (`ENCRYPTION_KEY`) tidak akan pernah bocor ke sisi klien peramban.
-
-```typescript
-// PENTING: Hanya dapat dipanggil di Server Components, Server Actions, atau API Routes
-import { encrypt, decrypt } from "@/lib/crypto";
-
-// Proses Enkripsi
-const token = encrypt("user-1234-uuid-secret");
-console.log(token); // Output: Base64 URL-Safe String terenkripsi
-
-// Proses Dekripsi
-const plainText = decrypt(token);
-console.log(plainText); // Output: "user-1234-uuid-secret"
-```
-
-*Catatan: Jika token terenkripsi mengalami manipulasi karakter oleh peretas, proses dekripsi akan secara otomatis mendeteksi kegagalan otentikasi data dan mengembalikan nilai `null` secara aman untuk mencegah serangan injeksi.*
+| Tombol / Pintasan | Aksi |
+| ----------------- | ---- |
+| `/`               | Langsung fokus ke kolom pencarian produk atau pemindai barcode |
+| `Enter`           | Tambahkan produk hasil scan barcode ke keranjang |
+| `Esc`             | Menutup jendela modal aktif (modal pembayaran, varian, struk) |
 
 ---
 
-## 🚀 Konfigurasi Environment Variables
+## 📄 Format Cetak Struk Kasir
 
-Template ini menggunakan sistem prioritas variabel lingkungan bawaan Next.js. Rahasia kriptografi diatur **tanpa** awalan `NEXT_PUBLIC_` untuk memastikan keamanan penuh di sisi server.
+Nota struk kasir didesain khusus agar pas di printer thermal tanpa potongan terpotong:
 
-Salin berkas template `.env.example` menjadi `.env.local` untuk konfigurasi lokal Anda:
+1. **Header Struk**: Nama toko (KulaPOS), alamat, waktu transaksi, dan nomor order.
+2. **Keterangan Pesanan**: Nomor meja dan jenis pemesanan (untuk F&B), atau nama pembeli (untuk Retail).
+3. **Daftar Barang**: Nama barang, nama varian terpilih, kuantitas, harga satuan, dan subtotal.
+4. **Rincian Finansial**: Subtotal, nominal diskon, tarif & nilai pajak, serta total tagihan akhir.
+5. **Detail Pembayaran**: Metode pembayaran terpilih, jumlah uang diserahkan, dan nominal kembalian.
+6. **Footer**: Ucapan terima kasih dan barcode referensi transaksi.
+
+---
+
+## 🛡️ Variabel Lingkungan (.env)
+
+Konfigurasi lingkungan diatur melalui file `.env`. Untuk pengembangan lokal, salin file contoh:
+
 ```bash
 cp .env.example .env.local
 ```
 
 ### Variabel Utama:
-* `ENCRYPTION_KEY`: Kunci rahasia berukuran **tepat 32 karakter** (256-bit) yang digunakan oleh modul AES-GCM.
-* `SQIDS_ALPHABET`: Deretan karakter kustom yang digunakan oleh Sqids untuk mengacak hash URL yang dihasilkan.
+* `NEXT_PUBLIC_APP_URL`: URL basis aplikasi (contoh: `http://localhost:3000` di lokal).
+* `ENCRYPTION_KEY`: Kunci rahasia 32 karakter (256-bit) untuk utilitas server-only AES-256-GCM.
+* `SQIDS_ALPHABET`: Deretan karakter alfabet acak untuk penyamaran ID numerik via Sqids.

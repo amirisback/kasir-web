@@ -66,7 +66,7 @@ export function Header() {
                   Kula<span className="text-primary">POS</span>
                 </span>
                 <span className="text-[10px] text-muted-foreground font-normal tracking-wide">
-                  Kedai Kopi & Kuliner
+                  Retail Toko &amp; F&amp;B Kafe
                 </span>
               </div>
             </Link>

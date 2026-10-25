@@ -38,14 +38,14 @@ export default async function HomePage() {
             <div className="max-w-2xl space-y-3">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
                 <span className="w-2 h-2 rounded-full bg-primary" />
-                <span>Point of Sale UMKM F&amp;B dan Coffee Shop</span>
+                <span>Dual-Mode Point of Sale: Retail Toko &amp; F&amp;B Kafe</span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
                 Pusat Operasional Kasir <span className="text-primary">KulaPOS</span>
               </h1>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                Kelola pesanan kedai kopi dan menu makanan secara cepat, hitung pajak otomatis,
-                terima pembayaran tunai atau QRIS, serta cetak struk kasir dalam hitungan detik.
+                Kelola penjualan toko retail via barcode scanner maupun pesanan kedai kafe dengan nomor meja. 
+                Dilengkapi hitung pajak fleksibel, diskon, pengurangan stok otomatis, dan cetak struk thermal 58mm/80mm.
               </p>
             </div>
 
@@ -68,7 +68,7 @@ export default async function HomePage() {
                     d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                   />
                 </svg>
-                <span>Mulai Transaksi Kasir (POS)</span>
+                <span>Buka Register Kasir (POS)</span>
               </Link>
               <Link
                 href="/transaksi"
@@ -99,22 +99,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Menu Highlights Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Featured Catalog Items */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Menu Favorit Pelanggan Hari Ini
+              Katalog Unggulan Retail &amp; F&amp;B
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-              Pilihan menu terlaris yang siap dipesan langsung di layar kasir POS.
+              Pilihan produk terlaris yang siap ditransaksikan di register kasir.
             </p>
           </div>
           <Link
             href="/pos"
             className="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-1"
           >
-            <span>Buka Semua Menu</span>
+            <span>Semua Produk</span>
             <span>&rarr;</span>
           </Link>
         </div>
@@ -133,14 +133,18 @@ export default async function HomePage() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-stone-900/80 text-white backdrop-blur-xs uppercase tracking-wider">
+                <div className="absolute top-3 left-3 flex gap-1.5">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary text-primary-foreground uppercase tracking-wider">
+                    {item.type}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-stone-900/80 text-white backdrop-blur-xs uppercase tracking-wider">
                     {item.category}
                   </span>
                 </div>
               </div>
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
+                  <div className="text-[11px] font-mono text-muted-foreground">{item.sku}</div>
                   <h3 className="font-bold text-base text-foreground group-hover:text-primary transition-colors">
                     {item.name}
                   </h3>
@@ -149,14 +153,14 @@ export default async function HomePage() {
                   </p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
-                  <div className="font-mono font-bold text-sm text-foreground">
+                  <div className="font-mono font-bold text-sm text-primary">
                     {formatRupiah(item.price)}
                   </div>
                   <Link
                     href="/pos"
                     className="min-h-[38px] px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary hover:text-primary-foreground text-primary text-xs font-semibold transition-colors flex items-center gap-1"
                   >
-                    <span>+ Pesan</span>
+                    <span>+ Kasir</span>
                   </Link>
                 </div>
               </div>
@@ -170,10 +174,10 @@ export default async function HomePage() {
         <div className="border border-border rounded-2xl bg-card p-6 sm:p-8">
           <div className="max-w-xl">
             <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
-              Alur Kasir Cepat 3 Langkah
+              Alur Kasir Dual-Mode
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              Petunjuk singkat untuk mempercepat antrean pelanggan pada jam sibuk kedai.
+              Operasikan kasir sesuai alur bisnis toko retail maupun kedai F&amp;B.
             </p>
           </div>
 
@@ -182,9 +186,9 @@ export default async function HomePage() {
               <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground font-mono font-bold flex items-center justify-center text-sm mb-3">
                 01
               </div>
-              <h3 className="font-semibold text-sm text-foreground">Pilih Menu &amp; Varian</h3>
+              <h3 className="font-semibold text-sm text-foreground">Pilih Mode Kasir</h3>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Filter produk berdasarkan kategori atau gunakan kolom pencarian instan untuk menambah item ke pesanan.
+                Pilih <strong>Mode Retail</strong> untuk scan barcode cepat atau <strong>Mode F&amp;B</strong> untuk manajemen meja dan pesanan dine-in.
               </p>
             </div>
 
@@ -192,9 +196,9 @@ export default async function HomePage() {
               <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground font-mono font-bold flex items-center justify-center text-sm mb-3">
                 02
               </div>
-              <h3 className="font-semibold text-sm text-foreground">Set Meja / Pelanggan</h3>
+              <h3 className="font-semibold text-sm text-foreground">Scan Barcode / Klik Produk</h3>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Pilih status Dine In atau Take Away, lalu masukkan nomor meja untuk kemudahan barista menyajikan pesanan.
+                Gunakan barcode scanner gun fisik, cari via SKU atau tekan shortcut <code>/</code>, dan sesuaikan varian serta diskon.
               </p>
             </div>
 
@@ -202,9 +206,9 @@ export default async function HomePage() {
               <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground font-mono font-bold flex items-center justify-center text-sm mb-3">
                 03
               </div>
-              <h3 className="font-semibold text-sm text-foreground">Bayar &amp; Cetak Struk</h3>
+              <h3 className="font-semibold text-sm text-foreground">Bayar &amp; Cetak Thermal</h3>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Terima uang pas/pecahan dengan hitung kembalian otomatis, atau tampilkan QRIS, dan langsung cetak struk thermal.
+                Hitung kembalian tunai atau QRIS, stok terpotong otomatis, dan langsung cetak struk thermal 58mm/80mm.
               </p>
             </div>
           </div>

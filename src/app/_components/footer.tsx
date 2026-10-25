@@ -10,7 +10,7 @@ export function Footer() {
           <div className="flex items-center gap-2">
             <span className="font-semibold text-foreground">KulaPOS</span>
             <span>&bull;</span>
-            <span>Solusi Kasir Digital UMKM Kuliner & Kedai Kopi</span>
+            <span>Solusi Kasir Digital UMKM Retail Toko &amp; F&amp;B Kafe</span>
           </div>
 
           <div className="flex items-center gap-4">

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'amber' | 'espresso' | 'success' | 'outline' | 'secondary';
+  variant?: 'amber' | 'espresso' | 'success' | 'outline' | 'secondary' | 'primary';
   size?: 'sm' | 'md';
 }
 
@@ -20,6 +20,7 @@ export const Badge: React.FC<BadgeProps> = ({
   }[size];
 
   const variantStyles = {
+    primary: 'bg-primary text-primary-foreground border border-primary/25',
     amber: 'bg-primary/15 text-primary border border-primary/25',
     espresso: 'bg-stone-800 text-stone-100 dark:bg-stone-200 dark:text-stone-900',
     success: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20',

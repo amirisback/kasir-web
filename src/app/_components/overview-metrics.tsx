@@ -50,13 +50,13 @@ export function OverviewMetrics() {
         </div>
       </div>
 
-      {/* Metric 2: Total Pesanan */}
+      {/* Metric 2: Split Omzet Retail & F&B */}
       <div className="bg-card text-card-foreground border border-border rounded-xl p-5 shadow-xs transition-shadow hover:shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Jumlah Transaksi
+            Omzet Retail vs F&amp;B
           </span>
-          <span className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+          <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -67,17 +67,23 @@ export function OverviewMetrics() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
               />
             </svg>
           </span>
         </div>
-        <div className="mt-3">
-          <div className="text-2xl font-bold font-mono tracking-tight text-foreground">
-            {summary.totalTransactions} Pesanan
+        <div className="mt-3 space-y-1 text-xs">
+          <div className="flex justify-between items-center text-muted-foreground">
+            <span>🛒 Retail:</span>
+            <span className="font-mono font-bold text-foreground">
+              {formatRupiah(summary.retailRevenue || 0)}
+            </span>
           </div>
-          <div className="mt-1 text-xs text-muted-foreground">
-            Status: Semua pesanan selesai
+          <div className="flex justify-between items-center text-muted-foreground">
+            <span>☕ F&amp;B:</span>
+            <span className="font-mono font-bold text-foreground">
+              {formatRupiah(summary.fnbRevenue || 0)}
+            </span>
           </div>
         </div>
       </div>
@@ -86,7 +92,7 @@ export function OverviewMetrics() {
       <div className="bg-card text-card-foreground border border-border rounded-xl p-5 shadow-xs transition-shadow hover:shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Rata-rata Nilai Pesanan
+            Rata-rata Order (AOV)
           </span>
           <span className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
             <svg
@@ -109,7 +115,7 @@ export function OverviewMetrics() {
             {formatRupiah(summary.averageOrderValue)}
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
-            AOV (Average Order Value)
+            Per transaksi kasir
           </div>
         </div>
       </div>
